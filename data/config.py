@@ -5,6 +5,7 @@ env.read_env()
 
 BOT_TOKEN = env.str("BOT_TOKEN")
 ADMIN = env.str("ADMIN")
-USERS_TO_NOTIFY = env.list("USERS_TO_NOTIFY")
+USERS_TO_NOTIFY = list(map(int, env.list("USERS_TO_NOTIFY")))
 IP = env.str("ip")
+INPUT_FILE = env.str("INPUT_FILE")
 
