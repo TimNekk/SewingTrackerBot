@@ -25,7 +25,11 @@ class Notifier:
         if not message:
             return
 
-        for user in self._users:
-            await self._dp.bot.send_message(user, message)
-
         self._clear_file()
+
+        for user in self._users:
+            try:
+                await self._dp.bot.send_message(user, message)
+            except:
+                pass
+
