@@ -3,3 +3,4 @@
 
 ## Features
 - Notifies user about wrong prices
+- Shows prices change history
