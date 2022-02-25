@@ -1,15 +1,33 @@
+import json
+from pprint import pformat
+
+import args as args
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
+from aiogram.utils.markdown import hcode
 
-from data.config import USERS_TO_NOTIFY
-from loader import dp
+from filters import IsWhitelisted
+from handlers.users.models import get_history
+from loader import dp, db
 
 
-@dp.message_handler(CommandStart())
+@dp.message_handler(IsWhitelisted(), CommandStart())
 async def bot_start(message: types.Message):
-    if message.chat.id in USERS_TO_NOTIFY:
-        text = "Привет, я буду отправлять уведомления, когда цена в магазинах будет ниже чем МРЦ"
-    else:
-        text = "Привет, если хочешь получать уведомления, напиши об этом @TimNekk"
+    if not message.get_args():
+        text = "<i>Привет, я буду отправлять уведомления, когда цена в магазинах будет ниже чем МРЦ</i>"
+        await message.answer(text)
+        return
 
-    await message.answer(text)
+    args = message.get_args().split("_")
+
+    try:
+        if args[0] == "history":
+            model_name, market = args[1].replace("-", " "), args[2]
+            model = db.get_model(model_name)
+            text = await get_history(model, market)
+        else:
+            raise ValueError(f'"{args[0]}" mode not found')
+
+        await message.answer(text)
+    except Exception as e:
+        await message.answer(f'Не удалось сериализировать deeplink\n\n{hcode(pformat(message.get_args()))}\n\n{hcode(e)}')

@@ -1,9 +1,8 @@
-from aiogram import Dispatcher
-
 from loader import dp
-# from .is_admin import AdminFilter
+from .whitelisted import IsWhitelisted
+from .admin import IsAdmin
 
 
 if __name__ == "filters":
-    # dp.filters_factory.bind(AdminFilter)
-    pass
+    dp.filters_factory.bind(IsWhitelisted)
+    dp.filters_factory.bind(IsAdmin)
