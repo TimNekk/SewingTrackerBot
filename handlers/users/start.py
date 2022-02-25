@@ -1,7 +1,7 @@
 import json
 from pprint import pformat
 
-import args as args
+
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 from aiogram.utils.markdown import hcode
